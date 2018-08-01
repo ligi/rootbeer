@@ -37,15 +37,10 @@ public class RootBeerTest {
         when(rootBeer.checkForRWPaths()).thenReturn(false);
         when(rootBeer.detectTestKeys()).thenReturn(false);
         when(rootBeer.checkSuExists()).thenReturn(false);
-        when(rootBeer.checkForRootNative()).thenReturn(false);
 
         // Test we return false when all methods return false
         assertTrue(!rootBeer.isRooted());
 
-        when(rootBeer.checkForRootNative()).thenReturn(true);
-
-        // Test we return true when just one returns true
-        assertTrue(rootBeer.isRooted());
     }
 
     @Test
@@ -64,7 +59,6 @@ public class RootBeerTest {
         when(rootBeer.checkForRWPaths()).thenReturn(false);
         when(rootBeer.detectTestKeys()).thenReturn(false);
         when(rootBeer.checkSuExists()).thenReturn(false);
-        when(rootBeer.checkForRootNative()).thenReturn(false);
 
         // Test we return false when all methods return false
         assertTrue(rootBeer.isRooted());

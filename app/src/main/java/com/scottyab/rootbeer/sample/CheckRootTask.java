@@ -110,7 +110,6 @@ public class CheckRootTask extends AsyncTask<Boolean, Integer, Boolean> {
                     Log.d(TAG, "DangerousProps " + (mIsCheck ? "detected" : "not detected"));
                     break;
                 case 72:
-                    mIsCheck = check.checkForRootNative();
                     Log.d(TAG, "Root via native check " + (mIsCheck ? "detected" : "not detected"));
                     break;
                 case 80:

@@ -42,7 +42,7 @@ public class RootBeer {
 
         return detectRootManagementApps() || detectPotentiallyDangerousApps() || checkForBinary("su")
                 || checkForBinary("busybox") || checkForDangerousProps() || checkForRWPaths()
-                || detectTestKeys() || checkSuExists() || checkForRootNative() || checkForMagiskBinary();
+                || detectTestKeys() || checkSuExists() || checkForMagiskBinary();
     }
 
     /**
@@ -54,7 +54,7 @@ public class RootBeer {
 
         return detectRootManagementApps() || detectPotentiallyDangerousApps() || checkForBinary("su")
                 || checkForDangerousProps() || checkForRWPaths()
-                || detectTestKeys() || checkSuExists() || checkForRootNative() || checkForMagiskBinary();
+                || detectTestKeys() || checkSuExists() || checkForMagiskBinary();
     }
 
     /**
@@ -124,7 +124,7 @@ public class RootBeer {
      * @return true if one of the apps it's installed
      */
     public boolean detectRootCloakingApps() {
-        return detectRootCloakingApps(null) || canLoadNativeLibrary() && !checkForNativeLibraryReadAccess();
+        return detectRootCloakingApps(null);
     }
 
     /**
@@ -345,62 +345,6 @@ public class RootBeer {
             if (process != null) process.destroy();
         }
     }
-
-
-    /**
-     * Checks if device has ReadAccess to the Native Library
-     * Precondition: canLoadNativeLibrary() ran before this and returned true
-     *
-     * Description: RootCloak automatically blocks read access to the Native Libraries, however
-     * allows for them to be loaded into memory. This check is an indication that RootCloak is
-     * installed onto the device.
-     *
-     * @return true if device has Read Access | false if UnsatisfiedLinkError Occurs
-     */
-    public boolean checkForNativeLibraryReadAccess() {
-        RootBeerNative rootBeerNative = new RootBeerNative();
-        try {
-            rootBeerNative.setLogDebugMessages(loggingEnabled);
-            return true;
-        } catch (UnsatisfiedLinkError e) {
-            return false;
-        }
-    }
-
-    /**
-     * Checks if it is possible to load our native library
-     * @return true if we can | false if not
-     */
-    public boolean canLoadNativeLibrary(){
-        return new RootBeerNative().wasNativeLibraryLoaded();
-    }
-
-    /**
-     * Native checks are often harder to cloak/trick so here we call through to our native root checker
-     * @return true if we found su | false if not, or the native library could not be loaded / accessed
-     */
-    public boolean checkForRootNative() {
-
-        if (!canLoadNativeLibrary()){
-            QLog.e("We could not load the native library to test for root");
-            return false;
-        }
-
-        String binaryName = "su";
-        String[] paths = new String[Const.suPaths.length];
-        for (int i = 0; i < paths.length; i++) {
-            paths[i] = Const.suPaths[i]+binaryName;
-        }
-
-        RootBeerNative rootBeerNative = new RootBeerNative();
-        try {
-            rootBeerNative.setLogDebugMessages(loggingEnabled);
-            return rootBeerNative.checkForRoot(paths) > 0;
-        } catch (UnsatisfiedLinkError e) {
-            return false;
-        }
-    }
-
 
 
 }
